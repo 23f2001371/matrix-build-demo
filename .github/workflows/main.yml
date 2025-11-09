@@ -1,0 +1,33 @@
+name: Matrix Multi-Platform Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # ✅ 3 different variants (OS based matrix build)
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: matrix-e3a88d2
+        run: echo "Running matrix build on ${{ matrix.os }}"
+
+      - name: Generate build output
+        run: |
+          echo "Build artifact for ${{ matrix.os }}" > build_output.txt
+          echo "Generated on $(date)" >> build_output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # ✅ Required naming format
+          name: build-e3a88d2-${{ matrix.os }}
+          path: build_output.txt
